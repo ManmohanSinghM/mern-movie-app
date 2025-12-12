@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Points to your backend
+  // FIX: Added 'https://' and '/api'
+  baseURL: 'https://mern-movie-app-production.up.railway.app/api', 
 });
 
 // Automatically add the Token to every request if we have one
