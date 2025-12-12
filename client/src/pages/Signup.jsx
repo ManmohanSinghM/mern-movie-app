@@ -1,13 +1,11 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Paper, TextField, Button, Typography, Box, Alert } from '@mui/material';
-import api from '../api/axios'; // Import API helper
+import { Container, Paper, TextField, Button, Typography, Box, Alert, Grid } from '@mui/material';
+import api from '../api/axios';
 
 const Signup = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext); // We will auto-login after signup
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,8 +15,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 1. Send Register Request
-      // Default role is 'user'. To create an admin, you'd need to manually send role: 'admin'
+      // 1. Register the user (Default role: 'user')
       const response = await api.post('/auth/register', {
         username: formData.username,
         password: formData.password,
@@ -28,8 +25,7 @@ const Signup = () => {
       // 2. Auto Login (Save token)
       localStorage.setItem('token', response.data.token);
       
-      // 3. Update Context & Redirect
-      // Quick refresh to load user state is easiest here
+      // 3. Force refresh to update AuthContext and go to Home
       window.location.href = '/'; 
     } catch (err) {
       setError(err.response?.data?.message || 'Error creating account');
@@ -71,8 +67,5 @@ const Signup = () => {
     </Container>
   );
 };
-
-// Need Grid import
-import { Grid } from '@mui/material'; 
 
 export default Signup;

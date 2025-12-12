@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom'; // Added Link import
+import { useNavigate, Link } from 'react-router-dom';
 import { Container, Paper, TextField, Button, Typography, Box, Alert } from '@mui/material';
 
 const Login = () => {
@@ -14,9 +14,9 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(username, password);
-      navigate('/'); // Redirect to Home Page on success
+      navigate('/'); 
     } catch (err) {
-      // Security Fix: Generic error message
+      // Security: Generic error message
       setError('Invalid username or password.');
     }
   };
@@ -33,33 +33,18 @@ const Login = () => {
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              label="Username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              margin="normal" required fullWidth label="Username" autoFocus
+              value={username} onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              margin="normal" required fullWidth label="Password" type="password"
+              value={password} onChange={(e) => setPassword(e.target.value)}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, height: 48 }}
-            >
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, height: 48 }}>
               Sign In
             </Button>
 
-            {/* NEW: Sign Up Link */}
+            {/* Link to Signup Page */}
             <Box sx={{ mt: 2, textAlign: 'center' }}>
               <Link to="/signup" style={{ textDecoration: 'none', color: '#1976d2' }}>
                 Don't have an account? Sign Up

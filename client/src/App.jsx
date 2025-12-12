@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Home from './pages/Home'; // This imports the real file you just made
+import Home from './pages/Home';
 import AddMovie from './pages/AddMovie';
-import Signup from './pages/Signup';
+import Signup from './pages/Signup'; // Import Signup
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} /> {/* Add Route */}
         <Route path="/add-movie" element={<AddMovie />} />
       </Routes>
     </Router>
