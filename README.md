@@ -3,8 +3,8 @@
 A full-stack movie management application built with React, Node.js, MongoDB, and Redis. Features include user authentication, role-based access control (Admin/User), and a background job queue for processing movie additions.
 
 ## 🚀 Live Demo
-**Application URL:** [PASTE YOUR VERCEL LINK HERE]  
-**Backend API:** [PASTE YOUR RAILWAY LINK HERE]
+**Application URL:** https://mern-movie-app-six.vercel.app/
+**Backend API:** mern-movie-app-production.up.railway.app
 
 ---
 
