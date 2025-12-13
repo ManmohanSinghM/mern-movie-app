@@ -1,3 +1,10 @@
+
+if (!process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET is missing');
+  process.exit(1);
+}
+
+
 // server.js — connection guard + graceful shutdown
 require('dotenv').config();
 const express = require('express');
@@ -15,7 +22,7 @@ app.options('*', cors());
 
 app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
-app.use('/api/auth', authRoutes);
+// app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 
 const PORT = process.env.PORT || 5000;
