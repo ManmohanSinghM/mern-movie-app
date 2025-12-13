@@ -23,7 +23,7 @@ const AddMovie = () => {
     try {
       // Send data to backend (which pushes to Queue)
       await api.post('/movies', movie);
-      setMessage('Success! Movie sent to processing queue.');
+      setMessage('Movie added successfully!');
       
       // Clear form after 2 seconds and go home
       setTimeout(() => {
