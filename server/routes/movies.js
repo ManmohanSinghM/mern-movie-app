@@ -1,35 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const Movie = require('../models/Movie');
-const movieQueue = require('../queues/movieQueue');
-const { verifyToken, isAdmin } = require('../middleware/auth'); // We need to create this next
+const { verifyToken, isAdmin } = require('../middleware/auth');
 
-// @desc    Add a movie (Pushes to Queue)
+// @desc    Add a movie
 // @route   POST /api/movies
 // @access  Admin
 router.post('/', verifyToken, isAdmin, async (req, res) => {
   try {
-    // Add job to the queue instead of saving directly
-    await movieQueue.add(req.body);
-    
-    res.status(202).json({ 
-      message: 'Request accepted. Movie is being processed in the background.',
-      movie: req.body 
+    const newMovie = new Movie(req.body);
+    await newMovie.save();
+
+    res.status(201).json({
+      message: 'Movie added successfully',
+      movie: newMovie
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// @desc    Get all movies (with Pagination, Search, & SORTING)
+// @desc    Get all movies
 // @route   GET /api/movies
 router.get('/', async (req, res) => {
   try {
     const { page = 1, limit = 10, search = '', sort = 'createdAt' } = req.query;
 
-    // 1. Search Logic
-    const query = search 
-      ? { 
+    const query = search
+      ? {
           $or: [
             { title: { $regex: search, $options: 'i' } },
             { description: { $regex: search, $options: 'i' } }
@@ -37,12 +35,11 @@ router.get('/', async (req, res) => {
         }
       : {};
 
-    // 2. Sort Logic
     let sortOption = {};
-    if (sort === 'rating') sortOption = { rating: -1 }; // Highest rating first
-    else if (sort === 'year') sortOption = { releaseDate: -1 }; // Newest first
-    else if (sort === 'title') sortOption = { title: 1 }; // A-Z
-    else sortOption = { createdAt: -1 }; // Default: Newest added
+    if (sort === 'rating') sortOption = { rating: -1 };
+    else if (sort === 'year') sortOption = { releaseDate: -1 };
+    else if (sort === 'title') sortOption = { title: 1 };
+    else sortOption = { createdAt: -1 };
 
     const movies = await Movie.find(query)
       .limit(limit * 1)
@@ -67,10 +64,7 @@ router.get('/', async (req, res) => {
 router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
-    
-    if (!movie) {
-      return res.status(404).json({ message: 'Movie not found' });
-    }
+    if (!movie) return res.status(404).json({ message: 'Movie not found' });
 
     await Movie.findByIdAndDelete(req.params.id);
     res.json({ message: 'Movie removed' });
